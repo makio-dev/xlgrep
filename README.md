@@ -167,9 +167,13 @@ Pythonがインストールされていない環境へ配布する場合は、Py
 
 ### Windows の場合
 
+venv のセットアップからビルドまで自動で行います：
+
 ```batch
 build_exe.bat
 ```
+
+> `.venv` が未作成でも自動で作成して依存関係をインストールします。
 
 `dist\excel_grep.exe` が生成されます。
 
@@ -194,12 +198,20 @@ chmod +x build_mac.sh
 ./dist/excel_grep --mode folder --path "/data" --keywords "エラー" --verbose
 ```
 
-### 手動でビルドする場合
+### 手動でビルドする場合（venv 有効化済みの前提）
 
 ```bash
-# venv を有効化した状態で
-source .venv/bin/activate
+# Windows PowerShell
+python -m venv .venv
+.venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+pip install pyinstaller
+pyinstaller excel_grep.spec --clean
 
+# macOS / Linux
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
 pip install pyinstaller
 pyinstaller excel_grep.spec --clean
 ```
