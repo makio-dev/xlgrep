@@ -1,0 +1,20 @@
+# Excel処理
+openpyxl>=3.1.0
+xlrd>=2.0.1
+
+# データ処理
+pandas>=2.0.0
+
+# CLI/UI
+tqdm>=4.65.0
+colorama>=0.4.6
+
+# EXE化
+pyinstaller>=5.13.0
+
+# 標準ライブラリ（明示的記載）
+# argparse (標準)
+# pathlib (標準)
+# re (標準)
+# csv (標準)
+# logging (標準)

@@ -1,0 +1,33 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+
+# 仮想環境
+.venv/
+venv/
+env/
+
+# PyInstaller
+build/
+dist/
+*.spec.bak
+
+# ログ（自動生成）
+logs/
+
+# テストデータ・一時ファイル
+test_data/
+test_files.csv
+results*.csv
+results*.json
+results*.txt
+
+# バックアップ
+*.bak
+
+# OS
+.DS_Store
+Thumbs.db
