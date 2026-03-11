@@ -22,8 +22,9 @@ cd xlgrep
 python3 -m venv .venv
 
 # 3. 仮想環境を有効化
-source .venv/bin/activate        # macOS / Linux
-# .venv\Scripts\activate.bat     # Windows
+source .venv/bin/activate            # macOS / Linux
+# .venv\Scripts\Activate.ps1        # Windows PowerShell
+# .venv\Scripts\activate.bat        # Windows コマンドプロンプト（cmd）
 
 # 4. 依存ライブラリをインストール
 pip install -r requirements.txt
