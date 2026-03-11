@@ -102,12 +102,13 @@ def _search_xlsx(file_path: Path, patterns: List[tuple], use_regex: bool) -> Lis
     try:
         for sheet_name in wb.sheetnames:
             ws = wb[sheet_name]
-            for row_idx, row in enumerate(ws.iter_rows(), start=1):
+            for row in ws.iter_rows():
                 for cell in row:
                     if cell.value is None:
                         continue
                     cell_str = str(cell.value)
-                    col_idx = cell.column if cell.column else 0
+                    row_idx = cell.row
+                    col_idx = cell.column
                     addr = _cell_address(row_idx, col_idx)
 
                     for kw, pattern in patterns:

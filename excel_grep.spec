@@ -21,6 +21,7 @@ a = Analysis(
         'core.searcher',
         'core.file_handler',
         'core.exporter',
+        'core.replacer',
         'cli.parser',
         'cli.wizard',
     ],

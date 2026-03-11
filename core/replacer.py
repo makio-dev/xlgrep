@@ -133,7 +133,7 @@ def replace_in_xlsx(
                                     row=row_idx,
                                     col=col_idx,
                                     matched_keyword=kw,
-                                    before=original,
+                                    before=current,
                                     after=new_val,
                                 ))
                                 current = new_val

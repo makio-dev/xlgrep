@@ -9,8 +9,8 @@ pandas>=2.0.0
 tqdm>=4.65.0
 colorama>=0.4.6
 
-# EXE化
-pyinstaller>=5.13.0
+# EXE化（ビルド時のみ必要。ビルドスクリプトが自動でインストールします）
+# pyinstaller>=5.13.0
 
 # 標準ライブラリ（明示的記載）
 # argparse (標準)

@@ -1,6 +1,6 @@
 # Excel Grep Tool
 
-Excelファイル内のテキストを正規表現対応で検索できるPythonツールです。
+Excelファイル内のテキストを正規表現対応で検索・置換できるPythonツールです。
 CLIとインタラクティブウィザードの両方で実行できます。
 
 ---
@@ -8,11 +8,29 @@ CLIとインタラクティブウィザードの両方で実行できます。
 ## 動作環境
 
 - Python 3.10 以上
-- macOS / Linux / Windows
+- Windows（PowerShell 推奨）/ macOS / Linux
 
 ---
 
 ## セットアップ
+
+### Windows（PowerShell）
+
+```powershell
+# 1. プロジェクトディレクトリへ移動
+cd xlgrep
+
+# 2. 仮想環境を作成
+python -m venv .venv
+
+# 3. 仮想環境を有効化
+.venv\Scripts\Activate.ps1
+
+# 4. 依存ライブラリをインストール
+pip install -r requirements.txt
+```
+
+### macOS / Linux
 
 ```bash
 # 1. プロジェクトディレクトリへ移動
@@ -22,9 +40,7 @@ cd xlgrep
 python -m venv .venv
 
 # 3. 仮想環境を有効化
-source .venv/bin/activate            # macOS / Linux
-# .venv\Scripts\Activate.ps1        # Windows PowerShell
-# .venv\Scripts\activate.bat        # Windows コマンドプロンプト（cmd）
+source .venv/bin/activate
 
 # 4. 依存ライブラリをインストール
 pip install -r requirements.txt
@@ -38,9 +54,9 @@ pip install -r requirements.txt
 
 ### ウィザードモード（推奨）
 
-```bash
-# 仮想環境を有効化してから実行
-source .venv/bin/activate
+```powershell
+# 仮想環境を有効化してから実行（PowerShell）
+.venv\Scripts\Activate.ps1
 python excel_grep.py --wizard
 ```
 
@@ -50,19 +66,19 @@ python excel_grep.py --wizard
 
 #### フォルダー内の全Excelファイルを検索
 
-```bash
-python excel_grep.py --mode folder --path "/path/to/folder" --keywords "エラー" "警告"
+```powershell
+python excel_grep.py --mode folder --path "C:\path\to\folder" --keywords "エラー" "警告"
 ```
 
 #### CSVファイルで対象ファイルを指定して検索
 
-```bash
+```powershell
 python excel_grep.py --mode filelist --csv files.csv --keywords "エラー" "警告"
 ```
 
 #### テキストファイルでパスリストを指定して検索
 
-```bash
+```powershell
 python excel_grep.py --mode filelist --input-file paths.txt --keywords "keyword"
 ```
 
@@ -70,8 +86,10 @@ python excel_grep.py --mode filelist --input-file paths.txt --keywords "keyword"
 
 ## オプション一覧
 
+### 検索オプション
+
 | オプション | 説明 | デフォルト |
-|-----------|------|-----------|
+|-----------|------|-----------| 
 | `--wizard` | ウィザードモードで起動 | - |
 | `--mode folder` | フォルダー指定モード | - |
 | `--mode filelist` | ファイルリスト指定モード | - |
@@ -81,27 +99,54 @@ python excel_grep.py --mode filelist --input-file paths.txt --keywords "keyword"
 | `--keywords KW...` | 検索キーワード（最大10個、スペース区切り） | - |
 | `--use-regex` | 正規表現モードを有効化 | 無効 |
 | `--no-regex` | 正規表現モードを明示的に無効化 | - |
+
+### 置換オプション
+
+| オプション | 説明 | デフォルト |
+|-----------|------|-----------|
+| `--replacements REP...` | 置換文字列（`--keywords` と同数指定。指定時は検索後に置換を実行） | - |
+| `--dry-run` | 置換のプレビューのみ実行（ファイルは書き換えない） | 無効 |
+| `--backup` | 置換前にバックアップ（.bak）を作成する | 有効 |
+| `--no-backup` | バックアップを作成しない | - |
+
+### 出力オプション
+
+| オプション | 説明 | デフォルト |
+|-----------|------|-----------|
 | `--output OUTPUT` | 結果の出力先ファイル（.csv / .json / .txt） | - |
+| `--output-format FMT` | 出力形式を明示的に指定（`--output` の拡張子より優先） | 拡張子から自動判定 |
+
+### ログオプション
+
+| オプション | 説明 | デフォルト |
+|-----------|------|-----------|
 | `--verbose` | 詳細ログを表示 | - |
 | `--quiet` | 最小限の出力のみ表示 | - |
 | `--log-file LOG` | ログファイルの出力先を指定 | 自動生成 |
+| `--log-dir DIR` | ログ出力ディレクトリを指定 | `logs` |
 
 ---
 
 ## 実行例
 
-```bash
-# まず仮想環境を有効化
-source .venv/bin/activate
+```powershell
+# まず仮想環境を有効化（PowerShell）
+.venv\Scripts\Activate.ps1
 
 # フォルダー検索（通常検索、CSV出力、詳細ログあり）
-python excel_grep.py --mode folder --path "/data/logs" --keywords "エラー" "警告" --no-regex --output results.csv --verbose
+python excel_grep.py --mode folder --path "C:\data\logs" --keywords "エラー" "警告" --no-regex --output results.csv --verbose
 
 # 正規表現で日付形式を検索
-python excel_grep.py --mode folder --path "/data" --keywords "^\d{4}-\d{2}-\d{2}$" --use-regex --output results.json
+python excel_grep.py --mode folder --path "C:\data" --keywords "^\d{4}-\d{2}-\d{2}$" --use-regex --output results.json
 
 # CSVリストを使って静音モードで検索
 python excel_grep.py --mode filelist --csv files.csv --keywords "keyword" --quiet --output results.txt
+
+# 置換（プレビューのみ - ファイルは変更されない）
+python excel_grep.py --mode folder --path "C:\data" --keywords "旧会社名" --replacements "新会社名" --dry-run
+
+# 置換（実行・バックアップ付き）
+python excel_grep.py --mode folder --path "C:\data" --keywords "旧会社名" --replacements "新会社名" --backup
 ```
 
 ---
@@ -112,8 +157,8 @@ python excel_grep.py --mode filelist --csv files.csv --keywords "keyword" --quie
 
 ```csv
 filepath
-/path/to/file1.xlsx
-/path/to/file2.xlsx
+C:\path\to\file1.xlsx
+C:\path\to\file2.xlsx
 ```
 
 ひな形ファイルは `templates/filelist_template.csv` にあります。
@@ -167,20 +212,28 @@ Pythonがインストールされていない環境へ配布する場合は、Py
 
 ### Windows の場合
 
-venv のセットアップからビルドまで自動で行います：
+#### ビルドスクリプトを使用（推奨）
+
+コマンドプロンプトから実行：
 
 ```batch
 build_exe.bat
+```
+
+PowerShell から実行する場合：
+
+```powershell
+cmd /c build_exe.bat
 ```
 
 > `.venv` が未作成でも自動で作成して依存関係をインストールします。
 
 `dist\excel_grep.exe` が生成されます。
 
-```batch
-REM 実行例
-dist\excel_grep.exe --wizard
-dist\excel_grep.exe --mode folder --path "C:\data" --keywords "エラー" --verbose
+```powershell
+# 実行例
+.\dist\excel_grep.exe --wizard
+.\dist\excel_grep.exe --mode folder --path "C:\data" --keywords "エラー" --verbose
 ```
 
 ### macOS / Linux の場合
@@ -198,17 +251,21 @@ chmod +x build_mac.sh
 ./dist/excel_grep --mode folder --path "/data" --keywords "エラー" --verbose
 ```
 
-### 手動でビルドする場合（venv 有効化済みの前提）
+### 手動でビルドする場合
 
-```bash
-# Windows PowerShell
+#### Windows（PowerShell）
+
+```powershell
 python -m venv .venv
 .venv\Scripts\Activate.ps1
 pip install -r requirements.txt
 pip install pyinstaller
 pyinstaller excel_grep.spec --clean
+```
 
-# macOS / Linux
+#### macOS / Linux
+
+```bash
 python -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
@@ -243,7 +300,8 @@ xlgrep/
 │   ├── searcher.py        # 検索エンジン（並列処理・正規表現対応）
 │   ├── file_handler.py    # ファイル収集（フォルダー/CSV/テキスト）
 │   ├── exporter.py        # 結果出力（CSV/JSON/TXT）
-│   └── logger.py          # ログ管理
+│   ├── logger.py          # ログ管理
+│   └── replacer.py        # 置換処理（.xlsxのみ対応）
 ├── cli/
 │   ├── parser.py          # CLI引数解析
 │   └── wizard.py          # ウィザードUI

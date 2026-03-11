@@ -3,7 +3,6 @@
 フォルダー再帰検索、CSVからのファイルリスト読み込み、テキストパースを提供する。
 """
 import csv
-import re
 import sys
 from pathlib import Path
 from typing import List, Optional
@@ -33,7 +32,7 @@ def collect_excel_files_from_folder(folder_path: str) -> List[Path]:
 
     files = []
     for ext in EXCEL_EXTENSIONS:
-        files.extend(path.rglob(f"*{ext}"))
+        files.extend(f for f in path.rglob(f"*{ext}") if not f.name.startswith("~$"))
 
     # 重複除外・ソート
     return sorted(set(files))
