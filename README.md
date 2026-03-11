@@ -19,7 +19,7 @@ CLIとインタラクティブウィザードの両方で実行できます。
 cd xlgrep
 
 # 2. 仮想環境を作成
-python3 -m venv .venv
+python -m venv .venv
 
 # 3. 仮想環境を有効化
 source .venv/bin/activate            # macOS / Linux
